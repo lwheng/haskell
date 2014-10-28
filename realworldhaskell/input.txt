@@ -1,2 +1,3 @@
 Hello World
 Heng Low Wee
+Haskell is great
