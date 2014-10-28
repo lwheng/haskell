@@ -4,6 +4,7 @@ module GlobRegex (
   ) where
 
 import Text.Regex.Posix ((=~))
+type GlobError = String
 
 globToRegex :: String -> String
 globToRegex cs = '^' : globToRegex' cs ++ "$"
