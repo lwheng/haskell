@@ -54,3 +54,34 @@ equalP'' :: (Eq a) => InfoP a -> a -> InfoP Bool
 greaterP = liftP (>)
 lesserP = liftP (<)
 equalP'' = liftP (==)
+
+liftP2 :: (a -> b -> c) -> InfoP a -> InfoP b -> InfoP c
+liftP2 q f g w x y z = f w x y z `q` g w x y z
+
+andP = liftP2 (&&)
+orP = liftP2 (||)
+
+constP :: a -> InfoP a
+constP k _ _ _ _ = k
+
+liftP' q f k w x y z = f w x y z `q` constP k w x y z
+
+myTest path _ (Just size) _ = takeExtension path == ".cpp" && size > 131072
+myTest _ _ _ _ = False
+
+liftPath :: (FilePath -> a) -> InfoP a
+liftPath f w _ _ _ = f w
+
+myTest2 = (liftPath takeExtension `equalP` ".cpp") `andP` (sizeP `greaterP` 131072)
+
+(==?) = equalP
+(&&?) = andP
+(>?) = greaterP
+
+myTest3 = (liftPath takeExtension ==? ".cpp") &&? (sizeP >? 131072)
+
+infix 4 ==?
+infix 3 &&?
+infix 4 >?
+
+myTest4 = liftPath takeExtension ==? ".cpp" &&? sizeP >? 131072
