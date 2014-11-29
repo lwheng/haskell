@@ -62,3 +62,18 @@ runTwoRandoms = do
   -- Otherwise if you run runTwoRandoms again, it returns the same randomized values
   setStdGen newState
   return res
+
+data CountedRandom = CountedRandom {
+    crGen :: StdGen
+  , crCount :: Int
+}
+
+type CRState = State CountedRandom
+-- type CRState a = State CountedRandom a
+
+getCountedRandom :: Random a => CRState a
+getCountedRandom = do
+  st <- get
+  let (val, gen') = random (crGen st)
+  put CountedRandom { crGen = gen', crCount = crCount st + 1 }
+  return val
