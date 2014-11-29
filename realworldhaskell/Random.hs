@@ -77,3 +77,21 @@ getCountedRandom = do
   let (val, gen') = random (crGen st)
   put CountedRandom { crGen = gen', crCount = crCount st + 1 }
   return val
+
+getCount :: CRState Int
+getCount = crCount `liftM` get
+
+putCount :: Int -> CRState ()
+putCount a = do
+  st <- get
+  put st { crCount = a }
+
+runCountedRandom :: IO Int
+runCountedRandom = do
+  gen <- getStdGen
+
+  let cr = CountedRandom { crGen = gen, crCount = 0} 
+  let (res, newState) = runState getCountedRandom cr
+
+  setStdGen (crGen newState)
+  return res
