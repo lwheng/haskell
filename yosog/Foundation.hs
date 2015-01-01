@@ -8,6 +8,7 @@ import Yesod.Auth.BrowserId (authBrowserId)
 import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
 import Data.Text
+import Yesod.Form.Nic       (YesodNic)
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -20,6 +21,9 @@ data App = App
     , appHttpManager :: Manager
     , appLogger      :: Logger
     }
+
+-- to use Html into forms
+instance YesodNic App
 
 instance HasHttpManager App where
     getHttpManager = appHttpManager
