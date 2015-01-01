@@ -2,5 +2,5 @@ module Handler.Echo where
 
 import Import
 
-getEchoR :: String -> Handler Html
-getEchoR string = defaultLayout [whamlet|<h1>#{string}|]
+getEchoR :: Text -> Handler Html
+getEchoR theText = defaultLayout [whamlet|<h1>#{theText}|]
