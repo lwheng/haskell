@@ -1,34 +1,48 @@
 module GlobRegex (
-  globToRegex,
-  matchesGlob
-  ) where
+    main
+  , globToRegex
+  , matchesGlob
+) where
 
 import Text.Regex.Posix ((=~))
+
+main :: IO ()
+main = return ()
+
 type GlobError = String
 
-globToRegex :: String -> String
+globToRegex
+  :: String
+  -> String
 globToRegex cs = '^' : globToRegex' cs ++ "$"
 
-globToRegex' :: String -> String
-globToRegex' "" = ""
-globToRegex' ('*':cs) = ".*" ++ globToRegex' cs
-globToRegex' ('?':cs) = '.' : globToRegex' cs
+globToRegex'
+  :: String
+  -> String
+globToRegex' ""             = ""
+globToRegex' ('*':cs)       = ".*" ++ globToRegex' cs
+globToRegex' ('?':cs)       = '.' : globToRegex' cs
 globToRegex' ('[':'!':c:cs) = "[^" ++ c : charClass cs
-globToRegex' ('[':c:cs) = '[' : c : charClass cs
-globToRegex' ('[':_) = error "unterminated character class"
-globToRegex' (c:cs) = escape c ++ globToRegex' cs
+globToRegex' ('[':c:cs)     = '[' : c : charClass cs
+globToRegex' ('[':_)        = error "unterminated character class"
+globToRegex' (c:cs)         = escape c ++ globToRegex' cs
 
-escape :: Char -> String
+escape
+  :: Char
+  -> String
 escape c | c `elem` regexChars = '\\' : [c]
          | otherwise = [c]
   where regexChars = "\\+()^$.{}]|"
 
-charClass :: String -> String
+charClass
+  :: String
+  -> String
 charClass (']':cs) = ']' : globToRegex' cs
 charClass (c:cs) = c : charClass cs
 charClass [] = error "unterminated character class"
 
-matchesGlob :: FilePath -> String -> Bool
-name `matchesGlob` pattern = name =~ (globToRegex pattern) 
-
-
+matchesGlob
+  :: FilePath
+  -> String
+  -> Bool
+name `matchesGlob` pattern = name =~ globToRegex pattern

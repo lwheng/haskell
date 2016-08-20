@@ -1,12 +1,12 @@
 module Glob (
-  namesMatching
-  ) where
+    namesMatching
+) where
 
-import GlobRegex (matchesGlob)
-import System.Directory (doesDirectoryExist, doesFileExist, getCurrentDirectory, getDirectoryContents)
-import System.FilePath (dropTrailingPathSeparator, splitFileName, (</>))
 import Control.Exception (handle)
-import Control.Monad (forM)
+import Control.Monad     (forM)
+import GlobRegex         (matchesGlob)
+import System.Directory  (doesDirectoryExist, doesFileExist, getCurrentDirectory, getDirectoryContents)
+import System.FilePath   (dropTrailingPathSeparator, splitFileName, (</>))
 
 isPattern :: String -> Bool
 isPattern = any (`elem` "[*?")
