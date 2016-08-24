@@ -2,6 +2,7 @@ data Tree a = Node (Tree a) (Tree a)
             | Leaf a
               deriving (Show)
 
+treeLengths :: Tree String -> Tree Int
 treeLengths (Leaf s) = Leaf (length s)
 treeLengths (Node l r) = Node (treeLengths l) (treeLengths r)
 
