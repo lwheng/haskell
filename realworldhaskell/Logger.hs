@@ -1,12 +1,14 @@
 module Logger (
-  Logger,
-  Log,
-  runLogger,
-  record
+    Logger
+
+  , Log
+  , record
+  , runLogger
 ) where
 
-import Text.Regex.Posix ((=~))
 import Control.Monad
+import Text.Regex.Posix ((=~))
+
 type GlobError = String
 type Log = [String]
 
