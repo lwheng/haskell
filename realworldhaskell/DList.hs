@@ -1,14 +1,19 @@
 module DList (
-  DList,
-  fromList,
-  toList,
-  empty,
-  append,
-  cons,
-  dfoldr,
+    main
+  , DList
+  
+  , append
+  , cons
+  , dfoldr
+  , empty
+  , fromList
+  , toList
 ) where
 
 import Data.Monoid
+
+main :: IO ()
+main = return ()
 
 newtype DList a = DL {
   unDL :: [a] -> [a]
