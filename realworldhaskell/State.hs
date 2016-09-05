@@ -8,17 +8,26 @@ newtype State s a = State {
                             runState :: s -> (a, s)
                           }
 
-returnState :: a -> State s a
+returnState
+  :: a
+  -> State s a
 returnState a = State $ \s -> (a, s)
 
-bindState :: State s a -> (a -> State s b) -> State s b
-bindState m k = State $ \s -> let (a, s') = runState m s
-                              in runState (k a) s'
+bindState
+  :: State s a
+  -> (a -> State s b)
+  -> State s b
+bindState m k = State $ \s -> let
+                                (a, s') = runState m s
+                              in
+                                runState (k a) s'
 
-get :: State s s
+get
+  :: State s s
 get = State $ \s -> (s, s)
 
-put :: s -> State s ()
+put
+  :: s -> State s ()
 put s = State $ \_ -> ((), s)
 
 instance Functor (State s) where
@@ -28,8 +37,11 @@ instance Functor (State s) where
                               (f a, s')
 
 instance Applicative (State s) where
-  pure = undefined
-  State x <*> State y = undefined
+  pure = returnState
+  x <*> y = State $ \s -> let
+                            (func, s') = runState x s
+                          in
+                            runState (fmap func y) s'
 
 instance Monad (State s) where
   return = returnState
