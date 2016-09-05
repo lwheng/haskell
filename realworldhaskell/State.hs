@@ -1,14 +1,13 @@
 module State where
 
-import Control.Monad
 import Control.Applicative
+import Control.Monad
+import Debug.Trace
 
 newtype State s a = State {
-  runState :: s -> (a, s)
-}
+                            runState :: s -> (a, s)
+                          }
 
--- Remember, the word "return" is not the return used in imperative languages
--- It refers to the monad wrapper
 returnState :: a -> State s a
 returnState a = State $ \s -> (a, s)
 
@@ -21,6 +20,16 @@ get = State $ \s -> (s, s)
 
 put :: s -> State s ()
 put s = State $ \_ -> ((), s)
+
+instance Functor (State s) where
+  fmap f st = State $ \s -> let
+                              (a, s') = runState st s
+                            in
+                              (f a, s')
+
+instance Applicative (State s) where
+  pure = undefined
+  State x <*> State y = undefined
 
 instance Monad (State s) where
   return = returnState
