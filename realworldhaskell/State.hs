@@ -38,10 +38,11 @@ instance Functor (State s) where
 
 instance Applicative (State s) where
   pure = returnState
-  x <*> y = State $ \s -> let
-                            (func, s') = runState x s
-                          in
-                            runState (fmap func y) s'
+  (<*>) = ap
+  -- x <*> y = State $ \s -> let
+  --                           (func, s') = runState x s
+  --                         in
+  --                           runState (fmap func y) s'
 
 instance Monad (State s) where
   return = returnState
