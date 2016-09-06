@@ -2,7 +2,6 @@ module State where
 
 import Control.Applicative
 import Control.Monad
-import Debug.Trace
 
 newtype State s a = State {
                             runState :: s -> (a, s)

@@ -6,11 +6,12 @@ module Logger (
   , runLogger
 ) where
 
+import Control.Applicative
 import Control.Monad
 import Text.Regex.Posix ((=~))
 
 type GlobError = String
-type Log = [String]
+type Log       = [String]
 
 runLogger :: Logger a -> (a, Log)
 runLogger = execLogger
@@ -18,15 +19,30 @@ runLogger = execLogger
 record :: String -> Logger ()
 record s = Logger ((), [s])
 
+returnLogger
+  :: a
+  -> Logger a
+returnLogger a = Logger (a, [])
+
 newtype Logger a = Logger { execLogger :: (a, Log) }
 
+instance Functor Logger where
+  fmap f m = let
+               (a, logs) = execLogger m
+             in
+               Logger (f a, logs)
+
+instance Applicative Logger where
+  pure  = returnLogger
+  (<*>) = ap
+
 instance Monad Logger where
-  return a = Logger (a, [])
-  m >>= k = let (a, w) = execLogger m
-                n = k a
-                (b, x) = execLogger n
-            in
-              Logger (b, w ++ x)
+  return = returnLogger
+  m >>= func = let
+                 (a, w) = execLogger m
+                 (b, x) = execLogger (func a)
+               in
+                 Logger (b, w ++ x)
 
 globToRegex :: String -> Logger String
 globToRegex cs =
