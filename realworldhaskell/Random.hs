@@ -1,8 +1,8 @@
 module Random where
 
-import System.Random
-import State
 import Control.Monad
+import State
+import System.Random
 
 rand :: IO Int
 rand = getStdRandom (randomR (0, maxBound))
@@ -30,14 +30,13 @@ getRandom' = do
   -- Remember the monad constructor is "State s"
   -- When we execute the (<-) operator, we unwrap the monad and access its value
   -- In this case, "get" sets the state as its value
-  -- And that's why "gen" because the StdGen
+  -- And that's why "gen" is the StdGen
   gen <- get
 
   -- We run the "random" function on a StdGen to get a (Int, StdGen)
   let (val, gen') = random gen
 
-  -- Not exactly sure why we even need this here
-  -- Perhaps: We are using getStdGen and setStdGen i.e. we are using the global number generator and that's why a put here don't matter
+  -- Put the new StdGen into the State
   put gen'
 
   -- Remember the implementation of "return" for our State monad

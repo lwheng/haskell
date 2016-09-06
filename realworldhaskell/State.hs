@@ -7,6 +7,18 @@ newtype State s a = State {
                             runState :: s -> (a, s)
                           }
 
+evalState
+  :: State s a
+  -> s
+  -> a
+evalState m s = fst (runState m s)
+
+execState
+  :: State s a
+  -> s
+  -> s
+execState m s = snd (runState m s)
+
 returnState
   :: a
   -> State s a
