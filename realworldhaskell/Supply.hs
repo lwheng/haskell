@@ -1,25 +1,35 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Supply (
-    main
-
-  , Supply
+    Supply
   , next
   , runSupply
 ) where
 
 import Control.Monad.State
 
-main :: IO ()
-main = return ()
-
 newtype Supply s a = S (State [s] a)
+  deriving (Monad, Applicative, Functor)
 
 next
   :: Supply s (Maybe s)
-next = undefined
+next = S $ do
+             st <- get
+             case st of
+               []     -> return Nothing
+               (x:xs) -> do
+                           put xs
+                           return (Just x)
 
 runSupply
   :: Supply s a
   -> [s]
   -> (a, [s])
-runSupply = undefined
+runSupply (S m) xs = runState m xs
 
+showTwo
+  :: (Show s)
+  => Supply s String
+showTwo = do
+  a <- next
+  b <- next
+  return (show "a: " ++ show a ++ ", b: " ++ show b)
