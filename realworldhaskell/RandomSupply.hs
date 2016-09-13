@@ -1,3 +1,5 @@
+module RandomSupply where
+
 import Supply
 import System.Random hiding (next)
 import Control.Arrow (first)
