@@ -11,6 +11,7 @@ module HandleIO (
 ) where
 
 import           Control.Monad.Trans (MonadIO (..))
+import           System.Directory    (removeFile)
 import           System.IO           (Handle, IOMode (..))
 import qualified System.IO as SIO
 
@@ -45,3 +46,10 @@ safeHello path = do
   h <- openFile path WriteMode
   hPutStrLn h "Hello World!"
   hClose h
+
+tidyHello
+  :: FilePath
+  -> HandleIO ()
+tidyHello path = do
+  safeHello path
+  liftIO (removeFile path)
