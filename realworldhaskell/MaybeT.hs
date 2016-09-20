@@ -61,3 +61,10 @@ instance (Monad m) => Monad (MaybeT m) where
   return = returnMT
   (>>=)  = bindMT
   fail   = failMT
+
+instance (MonadIO m) => MonadIO (MaybeT m) where
+  liftIO m = lift (liftIO m)
+
+instance (MonadState s m) => MonadState s (MaybeT m) where
+  get = lift get
+  put k = lift (put k)
