@@ -1,0 +1,2 @@
+/Library/Frameworks/GHC.framework/Versions/8.0.1-x86_64/usr/lib/ghc-8.0.1/bin/ghc -B/Library/Frameworks/GHC.framework/Versions/8.0.1-x86_64/usr/lib/ghc-8.0.1 --make -O2 A.hs +RTS -Sstderr -ticky 
+<<ghc: 49799016 bytes, 65 GCs, 3675680/9075432 avg/max bytes residency (6 samples), 20M in use, 0.000 INIT (0.003 elapsed), 0.015 MUT (0.018 elapsed), 0.094 GC (0.109 elapsed) :ghc>>
