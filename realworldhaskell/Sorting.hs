@@ -39,3 +39,27 @@ force xs = go xs `pseq` ()
   where
     go (_:xs) = go xs
     go []     = 1
+
+seqSort
+  :: (Ord a)
+  => [a]
+  -> [a]
+seqSort []     = []
+seqSort (x:xs) = lesser `pseq` (greater `pseq` (lesser ++ x:greater))
+  where
+    lesser  = seqSort [y | y <- xs, y <  x]
+    greater = seqSort [y | y <- xs, y >= x]
+
+parSort2
+  :: (Ord a)
+  => Int
+  -> [a]
+  -> [a]
+parSort2 _ []          = []
+parSort2 d list@(x:xs)
+  | d <= 0     = sort list
+  | otherwise = force greater `par` (force lesser `pseq` (lesser ++ x:greater))
+      where
+        lesser  = parSort2 d' [y | y <- xs, y <  x]
+        greater = parSort2 d' [y | y <- xs, y >= x]
+        d'      = d - 1

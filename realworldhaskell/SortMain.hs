@@ -1,4 +1,4 @@
-module SortMain where
+module Main where
 
 import Data.Time.Clock    (diffUTCTime, getCurrentTime)
 import System.Environment (getArgs)
@@ -8,8 +8,8 @@ import Sorting
 
 -- testFunction = sort
 -- testFunction = seqSort
-testFunction = parSort
--- testFunction = parSort2 2
+-- testFunction = parSort
+testFunction = parSort2 2
 
 randomInts
   :: Int
