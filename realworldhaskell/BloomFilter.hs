@@ -1,4 +1,9 @@
 module BloomFilter (
+    Bloom
+  , length
+  , elem
+  , notElem
+  , fromList
 ) where
 
 import BloomFilter.Internal
