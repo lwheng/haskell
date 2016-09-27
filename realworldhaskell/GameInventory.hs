@@ -107,3 +107,25 @@ transfer qty fromBal toBal = do
   when (qty > fromQty) retry
   writeTVar fromBal (fromQty - qty)
   readTVar toBal >>= writeTVar toBal . (qty +)
+
+maybeSTM
+  :: STM a
+  -> STM (Maybe a)
+maybeSTM m = (Just `liftM` m) `orElse` return Nothing
+
+shoppingList
+  :: [(Item, Gold)]
+  -> Player
+  -> Player
+  -> STM (Maybe (Item, Gold))
+shoppingList list buyer seller = maybeSTM . msum $ map sellOne list
+  where
+    sellOne this@(item, price) = do
+      sellItem item price buyer seller
+      return this
+
+maybeM
+  :: MonadPlus m
+  => m a
+  -> m (Maybe a)
+maybeM m = (Just `liftM` m) `mplus` return Nothing
