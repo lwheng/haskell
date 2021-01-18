@@ -1,0 +1,153 @@
+module Main where
+
+import qualified Data.List as L
+import qualified Data.Map.Strict as Map
+
+main :: IO ()
+main = do
+  let
+    arr1, arr2 :: [Int]
+    -- arr1 = [1,3,4,5,7]
+    -- arr2 = [2,3,5,6]
+    arr1 = [2,5,6]
+    arr2 = [4,6,8,10]
+    unioned = union [] arr1 arr2
+    intersected = intersect [] arr1 arr2
+  putStrLn $ show unioned
+  putStrLn $ show intersected
+
+  let
+    str = "()())()"
+  putStrLn $ removeInvalidParentheses str
+
+  let
+    k = 4
+    x = 35
+    arr = [12,16,22,30,35,39,42,45,48,50,53,55,56]
+  putStrLn $ show $ findKClosest k x arr
+
+  let
+    str1 = "abecbea"
+  putStrLn str1
+  putStrLn $ show $ canPalindrome str1
+
+  let
+    xxs = [
+            [1,3,5,7]
+          , [2,4,6,8]
+          , [0,9,10,11]
+          ]
+  putStrLn $ show $ merges xxs
+
+union
+  :: (Eq a, Ord a)
+  => [a]
+  -> [a]
+  -> [a]
+  -> [a]
+union acc [] [] = acc
+union acc [] ys = acc ++ ys
+union acc xs [] = acc ++ xs
+union acc (x:xs) (y:ys)
+  | x == y    = union (acc ++ [x]) xs ys
+  | x <  y    = union (acc ++ [x]) xs (y:ys)
+  | otherwise = union (acc ++ [y]) (x:xs) ys
+
+intersect
+  :: (Eq a, Ord a, Show a)
+  => [a]
+  -> [a]
+  -> [a]
+  -> [a]
+intersect acc [] [] = acc
+intersect acc [] ys = acc
+intersect acc xs [] = acc
+intersect acc (x:xs) (y:ys)
+  | x == y = intersect (acc ++ [x]) xs ys
+  | x <  y = intersect (acc       ) xs (y:ys)
+  | x >  y = intersect (acc       ) (x:xs) ys
+
+removeInvalidParentheses
+  :: String
+  -> String
+removeInvalidParentheses str = str
+
+findKClosest
+  :: Int
+  -> Int
+  -> [Int]
+  -> [Int]
+findKClosest k x arr =
+  let
+    smaller = reverse $ filter (<x) arr
+    larger  = filter (>x) arr
+  in
+   L.sort $ findKClosestHelper [] k x smaller larger
+
+findKClosestHelper
+  :: [Int]
+  -> Int
+  -> Int
+  -> [Int]
+  -> [Int]
+  -> [Int]
+findKClosestHelper acc 0 _ _ _ = acc
+findKClosestHelper acc k _ [] larger = acc ++ take k larger
+findKClosestHelper acc k _ smaller [] = acc ++ take k smaller
+findKClosestHelper acc k x (s:ss) (l:ls)
+  | abs (s-x) < abs (l-x) = findKClosestHelper (s:acc) (k-1) x ss (l:ls)
+  | abs (s-x) > abs (l-x) = findKClosestHelper (l:acc) (k-1) x (s:ss) ls
+  | otherwise             = findKClosestHelper (l:acc) (k-1) x (s:ss) ls
+
+-- | Given a string, we need to check whether it is possible to make this string a palindrome after removing exactly one character from this.
+canPalindrome
+  :: String
+  -> (Maybe Char, Bool)
+canPalindrome []  = (Nothing, False)
+canPalindrome str =
+  let
+    m = buildMap str -- Build a map so we know if a char has odd number of occurrences
+    oddM = Map.filter (==True) m
+    keys = Map.keys oddM
+  in
+    case length keys > 2 of
+      True -> (Nothing, False)
+      False -> (Just $ head keys, True)
+
+buildMap
+  :: String
+  -> Map.Map Char Bool
+buildMap str = foldl (\m k -> Map.alter f k m) Map.empty str
+  where
+    f :: Maybe Bool -> Maybe Bool
+    f Nothing = Just True
+    f b       = not <$> b
+
+isPalindrome
+  :: String
+  -> Bool
+isPalindrome s = s == reverse s
+
+mergePairs
+  :: [[Int]]
+  -> [[Int]]
+mergePairs [] = []
+mergePairs [x] = [x]
+mergePairs (x:y:xs) = (merge x y):mergePairs xs
+
+merges
+  :: [[Int]]
+  -> [Int]
+merges [] = []
+merges [x] = x
+merges xs = merges $ mergePairs xs
+
+merge
+  :: [Int]
+  -> [Int]
+  -> [Int]
+merge x  [] = x
+merge [] y  = y
+merge (x:xs) (y:ys)
+  | x < y     = x : merge xs     (y:ys)
+  | otherwise = y : merge (x:xs) ys
