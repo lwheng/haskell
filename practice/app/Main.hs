@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import qualified PentagonalNumbers as PN
 
 main :: IO ()
-main = someFunc
+main = print $ PN.pentagonalNumbers 5

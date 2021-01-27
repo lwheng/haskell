@@ -30,8 +30,11 @@ library
       ContainsDups
       FilterElements
       Lib
-      NinetyNine
+      LongestLeadingFragment
+      MovingAverage
+      NextGreaterElement
       PascalTriangle
+      PentagonalNumbers
       PerfectBetween
       PrefixCompression
       ProductExceptSelf
@@ -48,6 +51,8 @@ library
   build-depends:
       base >=4.7 && <5
     , containers
+    , extra
+    , ghc
     , parallel
     , parsec
     , unordered-containers
@@ -63,6 +68,8 @@ executable practice-exe
   build-depends:
       base >=4.7 && <5
     , containers
+    , extra
+    , ghc
     , parallel
     , parsec
     , practice
@@ -80,6 +87,8 @@ test-suite practice-test
   build-depends:
       base >=4.7 && <5
     , containers
+    , extra
+    , ghc
     , parallel
     , parsec
     , practice

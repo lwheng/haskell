@@ -25,6 +25,8 @@ dependencies:
 - parallel
 - parsec
 - unordered-containers
+- extra
+- ghc
 
 library:
   source-dirs: src

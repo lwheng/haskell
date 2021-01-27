@@ -1,15 +1,16 @@
 module SumsOfPowers (
-    main
+    sumsOfPower
 ) where
 
 import GHC.Float (int2Double)
 import qualified Data.Set as Set
 
-main :: IO ()
-main = do
-  [x, n] <- map read . lines <$> getContents :: IO [Int]
-
-  let
+sumsOfPower
+  :: Int
+  -> Int
+  -> Int
+sumsOfPower x n = Set.size sumsToX
+  where
     largest :: Int
     largest = floor $ (int2Double x) ** (int2Double 1 / int2Double n)
 
@@ -17,5 +18,3 @@ main = do
     set   = Set.fromList scope
     sets  = Set.powerSet set
     sumsToX = Set.filter (\s -> x == sum (Set.elems s)) sets
-
-  print $ Set.size sumsToX

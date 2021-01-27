@@ -1,12 +1,9 @@
 module PerfectBetween (
-    main
+    perfectBetween
 ) where
 
-main :: IO ()
-main = print $ perfectBetween 25 60
-
-
-perfectBetween :: Int -> Int -> [Int]
+perfectBetween :: Integer -> Integer -> [Integer]
 perfectBetween a b = filter (>a) squares
   where
-    squares = takeWhile (<b) $ map (^2) [1..]
+    two = 2 :: Integer
+    squares = takeWhile (<b) $ map (^two) [1..]

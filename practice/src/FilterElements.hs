@@ -4,7 +4,7 @@ module FilterElements (
 
 import           Control.Monad (forM, forM_)
 import qualified Data.List as List
-import qualified Data.HashMap.Strict as Map
+--import qualified Data.HashMap.Strict as Map
 import qualified Control.Parallel.Strategies as Par
 
 main :: IO ()
